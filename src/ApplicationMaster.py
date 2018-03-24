@@ -39,6 +39,15 @@ class ApplicationUI(tk.Frame):
 
         self.create_window()
 
+    def create_window(self):
+
+        pass
+
+    def destroy_window(self):
+
+        pass
+
+
     def create_login(self):
         """
         Documentation is my passion
