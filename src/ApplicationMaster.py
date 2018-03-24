@@ -1,5 +1,6 @@
 """
 By Samuel Buzas
+
 Application UI
 """
 
@@ -37,13 +38,18 @@ class ApplicationUI(tk.Frame):
         b3.pack(side="left")
 
 
-        self.create_window()
 
     def create_window(self):
+        """
+        Documentation is my passion
+        """
 
         pass
 
     def destroy_window(self):
+        """
+        Documentation is my passion
+        """
 
         pass
 
@@ -75,3 +81,4 @@ class Form(tk.Frame):
         Documentation is my passion
         """
         self.lift()
+
