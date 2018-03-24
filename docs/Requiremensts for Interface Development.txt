@@ -54,8 +54,8 @@ FRONT END DEVELOPMENT
 
 1.	The UI will have a master class which be called by other forms within the UI
 2.	Buttons that are present throughout all the forms will be referenced to this master class
-•	Submit button
-•	Back Button
+	•	Submit button
+	•	Back Button
 3.	Also, this class will be in charge of creating the home page or menu of the User Interface
 4.	Lastly, the master class will support the user's access to several forms
 
