@@ -15,6 +15,15 @@ class ApplicationUI(tk.Frame):
         """
         pass
 
+    def create_window(self):
+
+        pass
+
+    def destroy_window(self):
+
+        pass
+
+
     def create_login(self):
         """
         Documentation is my passion
