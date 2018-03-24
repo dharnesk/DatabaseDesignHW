@@ -2,7 +2,8 @@
 Created by Samuel Buzas
 Forms Parent Class
 """
-from src.ApplicationUI import ApplicationUI
+from src import ApplicationMaster
+
 import tkinter as tk
 class Form(tk.Frame):
     """
