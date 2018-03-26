@@ -3,6 +3,13 @@ import tkinter as tk
 LARGE_FONT = ("Verdana", 12)
 #let me know if this code is useful, so far the configuration page pops
 #up and lets you enter the server name
+
+def connect_to_sql_server(server_name, controller, e):
+    if (server_name != ""):
+        print(server_name)
+        controller.show_frame(FormOne)
+        e.forget()
+
 class ApplicationUI(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -32,9 +39,6 @@ class ApplicationUI(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
-def connect_to_sql_server(server_name):
-    print(server_name)
-
 class ConfigurationPage(tk.Frame): #Add more classes for more pages and then add them to the dictionary in the
                                     # Application UI class
     def __init__(self, parent, controller):
@@ -47,14 +51,14 @@ class ConfigurationPage(tk.Frame): #Add more classes for more pages and then add
         e.pack()
         e.focus_set()
         button1 = tk.Button(self, text="Enter",
-                            command=lambda: connect_to_sql_server(e.get()))
+                            command=lambda: connect_to_sql_server(e.get(), controller, e))
         button1.pack(pady=2, padx=2)
 
 
 class FormOne(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form", font=LARGE_FONT)
+        label = tk.Label(self, text="Form One", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
 
