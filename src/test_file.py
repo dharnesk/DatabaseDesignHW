@@ -1,9 +1,9 @@
 import tkinter as tk
 
 LARGE_FONT = ("Verdana", 12)
-#let me know if this code is useful, so far the configuration page pops
+#so far the configuration page pops
 #up and lets you enter the server name
-
+#https://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
 def connect_to_sql_server(server_name, controller, e):
     if (server_name != ""):
         print(server_name)
