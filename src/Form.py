@@ -3,22 +3,22 @@ Created by Samuel Buzas
 Forms Parent Class
 """
 from src import ApplicationMaster
-
 import tkinter as tk
+
 class Form(tk.Frame):
     """
-    Documentation is my passion
+    Documentation is my passion.
     """
     def __init__(self, *args, **kwargs):
         """
-        Documentation is my passion
+        Documentation is my passion.
         """
         tk.Frame.__init__(self, *args, **kwargs)
 
 
     def show(self):
         """
-        Documentation is my passion
+        Documentation is my passion.
         """
         self.lift()
 
@@ -30,6 +30,9 @@ class Form(tk.Frame):
 
 
 class ConfigurationForm(Form):
+    """
+    Documentation is my passion.
+    """
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)

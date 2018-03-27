@@ -29,13 +29,13 @@ class ApplicationUI(tk.Frame):
         form2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         form3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
-        b1 = tk.Button(buttonframe, text="Form 1", command=form1.lift)
-        b2 = tk.Button(buttonframe, text="Form 2", command=p2.lift)
-        b3 = tk.Button(buttonframe, text="Form 3", command=p3.lift)
+        btn1 = tk.Button(buttonframe, text="Form 1", command=form1.lift)
+        btn2 = tk.Button(buttonframe, text="Form 2", command=form2.lift)
+        btn3 = tk.Button(buttonframe, text="Form 3", command=form3.lift)
 
-        b1.pack(side="left")
-        b2.pack(side="left")
-        b3.pack(side="left")
+        btn1.pack(side="left")
+        btn2.pack(side="left")
+        btn3.pack(side="left")
 
 
 
@@ -82,8 +82,16 @@ class Form(tk.Frame):
         """
         self.lift()
 
+    def hide(self):
+        """
+        Documentation is my passion
+        """
+        self.lower()
 
 def main():
+    """
+    Documentation is my passion
+    """
     root = tk.Tk()
     root.mainloop()
 
