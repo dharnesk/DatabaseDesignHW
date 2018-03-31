@@ -83,7 +83,7 @@ class ConfigurationPage(ttk.Frame):
 class FormOne(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form One")
+        label = tk.Label(self, text="Report Request Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -97,7 +97,7 @@ class FormOne(ttk.Frame):
 class FormTwo(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Pending Review Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -111,7 +111,7 @@ class FormTwo(ttk.Frame):
 class FormThree(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Assigned Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -126,7 +126,7 @@ class FormThree(ttk.Frame):
 class FormFour(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Pending Development Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -140,7 +140,7 @@ class FormFour(ttk.Frame):
 class FormFive(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Development Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -154,7 +154,7 @@ class FormFive(ttk.Frame):
 class FormSix(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Peer Review Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -168,7 +168,7 @@ class FormSix(ttk.Frame):
 class FormSeven(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Business Review Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -183,7 +183,7 @@ class FormSeven(ttk.Frame):
 class FormEight(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Update Status Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -197,7 +197,7 @@ class FormEight(ttk.Frame):
 class FormNine(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Request Review Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -211,7 +211,7 @@ class FormNine(ttk.Frame):
 class FormTen(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Add Note Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -225,7 +225,7 @@ class FormTen(ttk.Frame):
 class FormEleven(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Add Level of Effort Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
@@ -239,7 +239,7 @@ class FormEleven(ttk.Frame):
 class FormTwelve(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Form Two")
+        label = tk.Label(self, text="Add a Developer Input Form")
         label.pack()
         e = tk.Entry(self)
         e.pack()
