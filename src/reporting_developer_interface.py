@@ -33,12 +33,6 @@ class ReportingDeveloperFormProcedures:
         self.cursor = cursor
         self.helper = ReportingDeveloperHelperFunctions(cursor)
 
-    def set_cursor(self, cursor):
-        self.cursor = cursor
-
-    def get_cursor(self):
-        return self.cursor
-
     def configuration_form_procedure(self):
         """
         Documentation is my passion.
