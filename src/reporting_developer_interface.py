@@ -9,23 +9,20 @@ from src.AppUI import *
 
 class ConfigInterface:
     """ Class to configure connection to database"""
-
     def __init__(self):
-        self.server_name = "localhost"
-        self.cursor = ""
+        self.database = 'Reporting_developer'
+        self.connection = ""
 
     def connect(self, server_name):
-        database = 'Reporting_developer'
-        connection = pyodbc.connect(
+        self.connection = pyodbc.connect(
             r'DRIVER={ODBC Driver 13 for SQL Server};'
             r'SERVER=' + server_name + ';'
-            r'DATABASE=' + database + ';'
+            r'DATABASE=' + self.database + ';'
             r'Trusted_Connection=yes;'
             r'QuotedID=Yes;'
             r'AnsiNPW=Yes;'
         )
-        self.cursor = connection.cursor()
-
+        return self.connection
 
 class ReportingDeveloperFormProcedures:
     """
@@ -35,6 +32,12 @@ class ReportingDeveloperFormProcedures:
     def __init__(self, cursor):
         self.cursor = cursor
         self.helper = ReportingDeveloperHelperFunctions(cursor)
+
+    def set_cursor(self, cursor):
+        self.cursor = cursor
+
+    def get_cursor(self):
+        return self.cursor
 
     def configuration_form_procedure(self):
         """

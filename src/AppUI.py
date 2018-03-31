@@ -9,18 +9,39 @@ import tkinter as tk
 from tkinter import ttk
 from src.reporting_developer_interface import *
 
+#We can change this, but this does work. Simply add functions to establish a connection for each form
+#and perform whatever work needs to be done for that forms input/data
+s_name = "empty"
+def connect_pressed(server_name):
+    global s_name
+    s_name = server_name
+    config = ConfigInterface()
+    connection = config.connect(server_name)
+    connection.close()
+
+def form_one_connect():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    cursor = connection.cursor()
+    #do stuff related to form one
+    #procedures = ReportingDeveloperFormProcedures(cursor)
+    #procedures.helper.add_peer_review(1, 1, "")
+    sql_command = ("SELECT status, added_by, added, row_version FROM work.statuses")
+    cursor.execute(sql_command)
+    results = cursor.fetchone() #test
+    connection.close()
+
+
 class AppUI(tk.Tk):
-    def __init__(self, interface):
+    def __init__(self):
         tk.Tk.__init__(self)
-        self.interface = interface
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
-
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         n = ttk.Notebook(container)
-        n.add(ConfigurationPage(self, interface), text='Configuration')
+        n.add(ConfigurationPage(self), text='Configuration')
         n.add(FormOne(self), text="Form One")
         n.add(FormTwo(self), text="Form Two")
         n.add(FormThree(self), text="Form Three")
@@ -37,7 +58,7 @@ class AppUI(tk.Tk):
 
 
 class ConfigurationPage(ttk.Frame):
-    def __init__(self, parent, interface):
+    def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Configuration Page")
         label.pack()
@@ -54,8 +75,9 @@ class ConfigurationPage(ttk.Frame):
         button = tk.Button(self,
                            text="Connect",
                            fg="red",
-                           command=lambda: interface.connect(e.get()))
+                           command=lambda: connect_pressed(e.get()))
         button.pack(pady=10)
+
 
 
 class FormOne(ttk.Frame):
@@ -66,6 +88,11 @@ class FormOne(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda: form_one_connect())
+        button.pack(pady=10)
 
 class FormTwo(ttk.Frame):
     def __init__(self, parent):
@@ -75,6 +102,11 @@ class FormTwo(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
 
 class FormThree(ttk.Frame):
     def __init__(self, parent):
@@ -84,6 +116,12 @@ class FormThree(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
+
 
 class FormFour(ttk.Frame):
     def __init__(self, parent):
@@ -93,6 +131,11 @@ class FormFour(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
 
 class FormFive(ttk.Frame):
     def __init__(self, parent):
@@ -102,6 +145,11 @@ class FormFive(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
 
 class FormSix(ttk.Frame):
     def __init__(self, parent):
@@ -111,6 +159,11 @@ class FormSix(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
 
 class FormSeven(ttk.Frame):
     def __init__(self, parent):
@@ -120,6 +173,12 @@ class FormSeven(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
+
 
 class FormEight(ttk.Frame):
     def __init__(self, parent):
@@ -129,6 +188,11 @@ class FormEight(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
 
 class FormNine(ttk.Frame):
     def __init__(self, parent):
@@ -138,6 +202,11 @@ class FormNine(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
 
 class FormTen(ttk.Frame):
     def __init__(self, parent):
@@ -147,6 +216,11 @@ class FormTen(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
 
 class FormEleven(ttk.Frame):
     def __init__(self, parent):
@@ -156,6 +230,11 @@ class FormEleven(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
 
 class FormTwelve(ttk.Frame):
     def __init__(self, parent):
@@ -165,16 +244,17 @@ class FormTwelve(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
+        button = tk.Button(self,
+                           text="Submit",
+                           fg="red",
+                           command=lambda:"")
+        button.pack(pady=10)
 
 def main():
     """
     Documentation is my passion.
     """
-    interface = ConfigInterface()
-    appUI = AppUI(interface)
-    procedures = ReportingDeveloperFormProcedures(interface.cursor)
-    #procedures.view_all_rows('work.peer_reviews')
-    # procedures.add_peer_review(1, 1, 'good')
+    appUI = AppUI()
     appUI.mainloop()
 
 if __name__ == "__main__":
