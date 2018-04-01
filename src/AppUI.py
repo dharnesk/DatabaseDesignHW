@@ -11,15 +11,16 @@ from src.reporting_developer_interface import *
 
 #We can change this, but this does work. Simply add functions to establish a connection for each form
 #and perform whatever work needs to be done for that forms input/data
+
 s_name = "empty"
-def connect_pressed(server_name):
+def on_connect_pressed(server_name):
     global s_name
     s_name = server_name
     config = ConfigInterface()
     connection = config.connect(server_name)
     connection.close()
 
-def form_one_connect():
+def on_submit_report_request():
     config = ConfigInterface()
     connection = config.connect(s_name)
     cursor = connection.cursor()
@@ -29,6 +30,61 @@ def form_one_connect():
     sql_command = ("SELECT status, added_by, added, row_version FROM work.statuses")
     cursor.execute(sql_command)
     results = cursor.fetchone() #test
+    connection.close()
+
+def on_submit_business_review(item_id, approval, reviewer, comment, reviewed):
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_pending_review():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_assigned_input():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_pending_development_input():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_development_input():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_peer_review_input():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_update_status_input():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_request_review_input():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_add_note_input():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_add_level_of_effort():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
+    connection.close()
+
+def on_submit_add_developer():
+    config = ConfigInterface()
+    connection = config.connect(s_name)
     connection.close()
 
 
@@ -48,7 +104,7 @@ class AppUI(tk.Tk):
         n.add(FormFour(self), text="Form Four")
         n.add(FormFive(self), text="Form Five")
         n.add(FormSix(self), text="Form Six")
-        n.add(FormSeven(self), text="Form Seven")
+        n.add(BusinessReviewInputForm(self), text="Business Review")
         n.add(FormEight(self), text="Form Eight")
         n.add(FormNine(self), text="Form Nine")
         n.add(FormTen(self), text="Form Ten")
@@ -75,7 +131,7 @@ class ConfigurationPage(ttk.Frame):
         button = tk.Button(self,
                            text="Connect",
                            fg="red",
-                           command=lambda: connect_pressed(e.get()))
+                           command=lambda: on_connect_pressed(e.get()))
         button.pack(pady=10)
 
 
@@ -91,7 +147,7 @@ class FormOne(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: form_one_connect())
+                           command=lambda: on_submit_report_request())
         button.pack(pady=10)
 
 class FormTwo(ttk.Frame):
@@ -165,19 +221,33 @@ class FormSix(ttk.Frame):
                            command=lambda:"")
         button.pack(pady=10)
 
-class FormSeven(ttk.Frame):
+class BusinessReviewInputForm(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Business Review Input Form")
         label.pack()
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+        label2 = tk.Label(self, text="Item ID")
+        label2.pack()
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
+        label3 = tk.Label(self, text="Approval")
+        label3.pack()
+        approval = tk.Entry(self)
+        approval.pack()
+        approval.focus_set()
+        label4 = tk.Label(self, text="Reviewer")
+        label4.pack()
+        reviewer = tk.Entry(self)
+        reviewer.pack()
+        reviewer.focus_set()
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_business_review())
         button.pack(pady=10)
+
+
 
 
 class FormEight(ttk.Frame):
