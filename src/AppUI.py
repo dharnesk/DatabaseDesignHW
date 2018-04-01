@@ -13,14 +13,17 @@ from src.reporting_developer_interface import *
 #and perform whatever work needs to be done for that forms input/data
 
 s_name = ""
+count = 0
 def on_connect_pressed(server_name, config_form):
     global s_name
+    global count
     s_name = server_name
     config = ConfigInterface()
     connection = config.connect(server_name)
-    if (s_name != ""):
+    if (s_name != "" and count == 0):
         label_success = tk.Label(config_form, text="Connection Successful")
         label_success.pack()
+        count+=1
     connection.close()
 
 def on_submit_report_request():
@@ -98,6 +101,8 @@ class AppUI(tk.Tk):
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+
+        self.winfo_toplevel().title("Reporting Developer GUI")
 
         n = ttk.Notebook(container)
         n.add(ConfigurationPage(self), text='Configuration')
