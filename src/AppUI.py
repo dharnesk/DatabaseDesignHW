@@ -13,11 +13,13 @@ from src.reporting_developer_interface import *
 #and perform whatever work needs to be done for that forms input/data
 
 s_name = "empty"
-def on_connect_pressed(server_name):
+def on_connect_pressed(server_name, config_form):
     global s_name
     s_name = server_name
     config = ConfigInterface()
     connection = config.connect(server_name)
+    label_success = tk.Label(config_form, text="Connection Successful")
+    label_success.pack()
     connection.close()
 
 def on_submit_report_request():
@@ -131,7 +133,7 @@ class ConfigurationPage(ttk.Frame):
         button = tk.Button(self,
                            text="Connect",
                            fg="red",
-                           command=lambda: on_connect_pressed(e.get()))
+                           command=lambda: on_connect_pressed(e.get(), self))
         button.pack(pady=10)
 
 
@@ -161,7 +163,7 @@ class FormTwo(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_pending_review())
         button.pack(pady=10)
 
 class FormThree(ttk.Frame):
@@ -175,7 +177,7 @@ class FormThree(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_assigned_input())
         button.pack(pady=10)
 
 
@@ -190,7 +192,7 @@ class FormFour(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_pending_development_input())
         button.pack(pady=10)
 
 class FormFive(ttk.Frame):
@@ -204,7 +206,7 @@ class FormFive(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_development_input())
         button.pack(pady=10)
 
 class FormSix(ttk.Frame):
@@ -218,7 +220,7 @@ class FormSix(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_peer_review_input())
         button.pack(pady=10)
 
 class BusinessReviewInputForm(ttk.Frame):
@@ -241,10 +243,15 @@ class BusinessReviewInputForm(ttk.Frame):
         reviewer = tk.Entry(self)
         reviewer.pack()
         reviewer.focus_set()
+        label5 = tk.Label(self, text="Comment")
+        label5.pack()
+        comment = tk.Entry(self)
+        comment.pack()
+        comment.focus_set()
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_business_review())
+                           command=lambda: on_submit_business_review(item_id, approval, reviewer, comment, ""))
         button.pack(pady=10)
 
 
@@ -261,7 +268,7 @@ class FormEight(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_update_status_input())
         button.pack(pady=10)
 
 class FormNine(ttk.Frame):
@@ -275,7 +282,7 @@ class FormNine(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_request_review_input())
         button.pack(pady=10)
 
 class FormTen(ttk.Frame):
@@ -289,7 +296,7 @@ class FormTen(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_add_note_input())
         button.pack(pady=10)
 
 class FormEleven(ttk.Frame):
@@ -303,7 +310,7 @@ class FormEleven(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_add_level_of_effort())
         button.pack(pady=10)
 
 class FormTwelve(ttk.Frame):
@@ -317,7 +324,7 @@ class FormTwelve(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda:"")
+                           command=lambda: on_submit_add_developer())
         button.pack(pady=10)
 
 def main():
