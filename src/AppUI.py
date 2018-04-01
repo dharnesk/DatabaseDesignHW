@@ -14,16 +14,22 @@ from src.reporting_developer_interface import *
 
 s_name = ""
 count = 0
-def on_connect_pressed(server_name, config_form):
+def on_connect_pressed(server_name, label_success, label_failed):
     global s_name
     global count
     s_name = server_name
     config = ConfigInterface()
-    connection = config.connect(server_name)
-    if (s_name != "" and count == 0):
-        label_success = tk.Label(config_form, text="Connection Successful")
-        label_success.pack()
-        count+=1
+    try:
+        connection = config.connect(server_name)
+        label_failed.pack_forget()
+        if (s_name != "" and count == 0):
+            label_success.pack()
+            count += 1
+    except:
+        count = 0
+        label_success.pack_forget()
+        label_failed.pack()
+
     connection.close()
 
 def on_submit_report_request():
@@ -136,10 +142,12 @@ class ConfigurationPage(ttk.Frame):
         e2 = tk.Entry(self)
         e2.pack()
         e2.focus_set()
+        label_success = tk.Label(self, text="Connection Successful")
+        label_failed = tk.Label(self, text="Connection Failed")
         button = tk.Button(self,
                            text="Connect",
                            fg="red",
-                           command=lambda: on_connect_pressed(e.get(), self))
+                           command=lambda: on_connect_pressed(e.get(), label_success, label_failed))
         button.pack(pady=10)
 
 
