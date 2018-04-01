@@ -12,17 +12,16 @@ from src.reporting_developer_interface import *
 #We can change this, but this does work. Simply add functions to establish a connection for each form
 #and perform whatever work needs to be done for that forms input/data
 
-s_name = ""
 count = 0
-def on_connect_pressed(server_name, label_success, label_failed):
-    global s_name
+def on_connect_pressed(server_name, label_success, label_failed, parent):
     global count
-    s_name = server_name
+    parent.set_server_name(server_name)
+    #s_name = server_name
     config = ConfigInterface()
     try:
         connection = config.connect(server_name)
         label_failed.pack_forget()
-        if (s_name != "" and count == 0):
+        if (server_name != "" and count == 0):
             label_success.pack()
             count += 1
     except:
@@ -32,9 +31,9 @@ def on_connect_pressed(server_name, label_success, label_failed):
 
     connection.close()
 
-def on_submit_report_request():
+def on_submit_report_request(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name())
     cursor = connection.cursor()
     #do stuff related to form one
     #procedures = ReportingDeveloperFormProcedures(cursor)
@@ -44,59 +43,59 @@ def on_submit_report_request():
     results = cursor.fetchone() #test
     connection.close()
 
-def on_submit_business_review(item_id, approval, reviewer, comment, reviewed):
+def on_submit_business_review(item_id, approval, reviewer, comment, reviewed, parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_pending_review():
+def on_submit_pending_review(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_assigned_input():
+def on_submit_assigned_input(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_pending_development_input():
+def on_submit_pending_development_input(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_development_input():
+def on_submit_development_input(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_peer_review_input():
+def on_submit_peer_review_input(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_update_status_input():
+def on_submit_update_status_input(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_request_review_input():
+def on_submit_request_review_input(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_add_note_input():
+def on_submit_add_note_input(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name)
     connection.close()
 
-def on_submit_add_level_of_effort():
+def on_submit_add_level_of_effort(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name)
     connection.close()
 
-def on_submit_add_developer():
+def on_submit_add_developer(parent):
     config = ConfigInterface()
-    connection = config.connect(s_name)
+    connection = config.connect(parent.get_server_name)
     connection.close()
 
 
@@ -107,7 +106,7 @@ class AppUI(tk.Tk):
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-
+        self.server_name = ""
         self.winfo_toplevel().title("Reporting Developer GUI")
 
         n = ttk.Notebook(container)
@@ -125,6 +124,12 @@ class AppUI(tk.Tk):
         n.add(FormEleven(self), text="Form Eleven")
         n.add(FormTwelve(self), text="Form Twelve")
         n.pack()
+
+    def set_server_name(self, server_name):
+        self.server_name = server_name
+
+    def get_server_name(self):
+        return self.server_name
 
 
 class ConfigurationPage(ttk.Frame):
@@ -147,7 +152,7 @@ class ConfigurationPage(ttk.Frame):
         button = tk.Button(self,
                            text="Connect",
                            fg="red",
-                           command=lambda: on_connect_pressed(e.get(), label_success, label_failed))
+                           command=lambda: on_connect_pressed(e.get(), label_success, label_failed, parent))
         button.pack(pady=10)
 
 
@@ -163,7 +168,7 @@ class FormOne(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_report_request())
+                           command=lambda: on_submit_report_request(parent))
         button.pack(pady=10)
 
 class FormTwo(ttk.Frame):
@@ -177,7 +182,7 @@ class FormTwo(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_pending_review())
+                           command=lambda: on_submit_pending_review(parent))
         button.pack(pady=10)
 
 class FormThree(ttk.Frame):
@@ -191,7 +196,7 @@ class FormThree(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_assigned_input())
+                           command=lambda: on_submit_assigned_input(parent))
         button.pack(pady=10)
 
 
@@ -206,7 +211,7 @@ class FormFour(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_pending_development_input())
+                           command=lambda: on_submit_pending_development_input(parent))
         button.pack(pady=10)
 
 class FormFive(ttk.Frame):
@@ -220,7 +225,7 @@ class FormFive(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_development_input())
+                           command=lambda: on_submit_development_input(parent))
         button.pack(pady=10)
 
 class FormSix(ttk.Frame):
@@ -234,7 +239,7 @@ class FormSix(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_peer_review_input())
+                           command=lambda: on_submit_peer_review_input(parent))
         button.pack(pady=10)
 
 class BusinessReviewInputForm(ttk.Frame):
@@ -265,7 +270,7 @@ class BusinessReviewInputForm(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_business_review(item_id, approval, reviewer, comment, ""))
+                           command=lambda: on_submit_business_review(item_id, approval, reviewer, comment, "", parent))
         button.pack(pady=10)
 
 
@@ -282,7 +287,7 @@ class FormEight(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_update_status_input())
+                           command=lambda: on_submit_update_status_input(parent))
         button.pack(pady=10)
 
 class FormNine(ttk.Frame):
@@ -296,7 +301,7 @@ class FormNine(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_request_review_input())
+                           command=lambda: on_submit_request_review_input(parent))
         button.pack(pady=10)
 
 class FormTen(ttk.Frame):
@@ -310,7 +315,7 @@ class FormTen(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_note_input())
+                           command=lambda: on_submit_add_note_input(parent))
         button.pack(pady=10)
 
 class FormEleven(ttk.Frame):
@@ -324,7 +329,7 @@ class FormEleven(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_level_of_effort())
+                           command=lambda: on_submit_add_level_of_effort(parent))
         button.pack(pady=10)
 
 class FormTwelve(ttk.Frame):
@@ -338,7 +343,7 @@ class FormTwelve(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_developer())
+                           command=lambda: on_submit_add_developer(parent))
         button.pack(pady=10)
 
 def main():
