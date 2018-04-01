@@ -12,14 +12,15 @@ from src.reporting_developer_interface import *
 #We can change this, but this does work. Simply add functions to establish a connection for each form
 #and perform whatever work needs to be done for that forms input/data
 
-s_name = "empty"
+s_name = ""
 def on_connect_pressed(server_name, config_form):
     global s_name
     s_name = server_name
     config = ConfigInterface()
     connection = config.connect(server_name)
-    label_success = tk.Label(config_form, text="Connection Successful")
-    label_success.pack()
+    if (s_name != ""):
+        label_success = tk.Label(config_form, text="Connection Successful")
+        label_success.pack()
     connection.close()
 
 def on_submit_report_request():
