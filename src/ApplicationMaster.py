@@ -1,7 +1,5 @@
 """
-By Samuel Buzas
-
-Application UI
+ApplicationMaster.pY
 """
 from src.Form import *
 import tkinter as tk
