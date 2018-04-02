@@ -162,12 +162,69 @@ class ReportingDeveloperHelperFunctions:
                             name, requested, added_by,  requester, department, priority,
                             purpose, requirements, work_type, 'Internal'))
 
+    def add_note(self, item_id, note):
+        """
+        :param item_id: fk int item id
+        :param note: text for note
+        :return: none
+        """
+        added_by = self.get_truncated_username()
+        self.cursor.execute("""INSERT INTO work.notes (item_id, note, added_by) VALUES('{}','{}', '{}')""".format(
+                            item_id, note, added_by))
+
+    def add_peer_review(self, item_id, approval, comment, reviewed=datetime.datetime.now(), reviewer=None):
+        """
+        :param item_id: fk int item id
+        :param approval: int 0 or 1
+        :param comment: text for comment
+        :param reviewed: datetime when reviewed
+        :param reviewer: fk fk varchar(30) reviewer username
+        :return: none
+        """
+        reviewed = reviewed.strftime('%Y-%m-%d %H:%M:%S')
+        if reviewer is None:
+            reviewer = self.get_truncated_username()
+        self.cursor.execute("""INSERT INTO work.peer_reviews (item_id, approval, comment, reviewer, reviewed) 
+                            VALUES('{}','{}','{}','{}','{}')""".format
+                            (item_id, approval, comment, reviewer, reviewed))
+
+    def add_request_review(self, item_id, approval, comment, reviewed=datetime.datetime.now(), reviewer=None):
+        """
+        :param item_id: fk int item id
+        :param approval: int 0 or 1 for approval
+        :param comment: text for comment
+        :param reviewed: datetime of when reviewed
+        :param reviewer: fk varchar(30) username of reviewer
+        :return:
+        """
+        reviewed = reviewed.strftime('%Y-%m-%d %H:%M:%S')
+        if reviewer is None:
+            reviewer = self.get_truncated_username()
+        self.cursor.execute("""INSERT INTO work.request_reviews (item_id, approval, comment, reviewer, reviewed)
+                            VALUES('{}','{}','{}','{}','{}')""".format
+                            (item_id, approval, comment, reviewer, reviewed))
+
+    def assign_item(self, item_id, assignee, assigned=datetime.datetime.now(), assigner=None):
+        """
+        :param item_id: fk int item id
+        :param assignee: fk varchar(30) username of assignee
+        :param assigned: datetime of when assigned
+        :param assigner: fk varchar(30) username of assigner
+        :return:
+        """
+        if assigner is None:
+            assigner = self.get_truncated_username()
+        assigned = assigned.strftime('%Y-%m-%d %H:%M:%S')
+        self.cursor.execute("""INSERT INTO work.assignments 
+                            (item_id, assignee, assigner, assigned)
+                            VALUES('{}','{}','{}','{}')""".format
+                            (item_id, assignee, assigner, assigned))
+
 
 def main():
     interface = ConfigInterface()
 
-
-    # procedures = ReportingDeveloperHelperFunctions(interface.cursor)
+    procedures = ReportingDeveloperHelperFunctions(interface.cursor)
     # To test:
 
     # Successfully tested:
@@ -188,6 +245,18 @@ def main():
     # procedures.add_level_of_effort(2010, 22,)
     # test_added = datetime.datetime.now() - datetime.timedelta(days=2)
     # procedures.add_level_of_effort(2022, 22, test_added)
+
+    # Testing add_note
+    # procedures.add_note(2010, "Test note")
+
+    # Testing add_peer_review
+    # procedures.add_peer_review(2010, 0, "Test comment", datetime.datetime.now(), None)
+
+    # Testing add_request_review
+    # procedures.add_request_review(2010, 0, "Test Comment", datetime.datetime.now(), None)
+
+    # Testing assign_item
+    # procedures.assign_item(2010, procedures.get_truncated_username(), datetime.datetime.now(), None)
 
     # Failed tests:
 
