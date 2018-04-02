@@ -4,7 +4,6 @@ import datetime
 import os
 import pyodbc
 import time
-
 import tkinter as tk
 from tkinter import ttk
 from src.reporting_developer_interface import *
@@ -18,12 +17,12 @@ def on_connect_pressed(server_name, label_success, label_failed, parent):
     parent.set_server_name(server_name)
     config = ConfigInterface()
     try:
-        connection = config.connect(server_name)
         label_failed.pack_forget()
         if (server_name != "" and count == 0):
+            connection = config.connect(server_name)
             label_success.pack()
             count += 1
-        connection.close()
+            connection.close()
     except:
         count = 0
         label_success.pack_forget()
