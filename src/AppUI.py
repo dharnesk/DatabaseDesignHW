@@ -16,7 +16,6 @@ count = 0
 def on_connect_pressed(server_name, label_success, label_failed, parent):
     global count
     parent.set_server_name(server_name)
-    #s_name = server_name
     config = ConfigInterface()
     try:
         connection = config.connect(server_name)
@@ -24,12 +23,12 @@ def on_connect_pressed(server_name, label_success, label_failed, parent):
         if (server_name != "" and count == 0):
             label_success.pack()
             count += 1
+        connection.close()
     except:
         count = 0
         label_success.pack_forget()
         label_failed.pack()
 
-    connection.close()
 
 def on_submit_report_request(parent):
     config = ConfigInterface()
@@ -85,17 +84,17 @@ def on_submit_request_review_input(parent):
 
 def on_submit_add_note_input(parent):
     config = ConfigInterface()
-    connection = config.connect(parent.get_server_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
 def on_submit_add_level_of_effort(parent):
     config = ConfigInterface()
-    connection = config.connect(parent.get_server_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
 def on_submit_add_developer(parent):
     config = ConfigInterface()
-    connection = config.connect(parent.get_server_name)
+    connection = config.connect(parent.get_server_name())
     connection.close()
 
 
@@ -136,7 +135,7 @@ class ConfigurationPage(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Configuration Page")
-        label.pack()
+        label.pack(pady=10)
         label2 = tk.Label(self, text="Server Name")
         label2.pack()
         e = tk.Entry(self)
@@ -161,7 +160,7 @@ class FormOne(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Report Request Input Form")
-        label.pack()
+        label.pack(pady=10)
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
