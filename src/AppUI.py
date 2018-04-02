@@ -12,20 +12,23 @@ from tkinter import ttk
 #We can change this, but this does work. Simply add functions to establish a connection for each form
 #and perform whatever work needs to be done for that forms input/data
 
-count = 0
+CONNECT_ATTEMPT = 0
 def on_connect_pressed(server_name, label_success, label_failed, parent):
-    global count
+    """
+    Attempts to make a connection to the supplied DB server
+    """
+    global CONNECT_ATTEMPT
     parent.set_server_name(server_name)
     config = ConfigInterface()
     try:
         connection = config.connect(server_name)
         label_failed.pack_forget()
-        if server_name != "" and count == 0:
+        if server_name != "" and CONNECT_ATTEMPT == 0:
             label_success.pack()
-            count += 1
+            CONNECT_ATTEMPT += 1
         connection.close()
     except:
-        count = 0
+        CONNECT_ATTEMPT = 0
         label_success.pack_forget()
         label_failed.pack()
 
