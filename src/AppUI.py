@@ -21,12 +21,12 @@ def on_connect_pressed(server_name, label_success, label_failed, parent):
     parent.set_server_name(server_name)
     config = ConfigInterface()
     try:
-        connection = config.connect(server_name)
         label_failed.pack_forget()
         if server_name != "" and CONNECT_ATTEMPT == 0:
+            connection = config.connect(server_name)
             label_success.pack()
             CONNECT_ATTEMPT += 1
-        connection.close()
+            connection.close()
     except:
         CONNECT_ATTEMPT = 0
         label_success.pack_forget()
