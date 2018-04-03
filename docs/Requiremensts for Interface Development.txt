@@ -1,0 +1,62 @@
+CS 4092 Database Design
+Homework 3
+Group 14
+Samuel Buzas
+Saylee Dharne
+Tomas Seymour
+Nick Roberts
+Miguel Angel Parra
+
+REQUIREMENTS REPORTING DEVELOPER USER INTERFACE
+
+For the development of this application, there will be 2 sections in the development of the front end application:
+	•	Back End development: database form connection and changes
+	•	Front End development: User forms to be filled out by user
+	
+
+BACKEND DEVELOPMENT
+	
+There will be 13 forms to be developed. This are described as follows:
+	1. Configuration form
+	2. Report Request input
+	3. Pending Review Input
+	4. Assignment form
+	5. Pending Development
+	6. Development
+	7. Peer Review input form
+	8. Business Review Input Form
+	9. Update Status input form 
+	10. Request review input form
+	11. Add a note input form
+	12. Add level of effort input form
+	13. Add a developer
+	
+The connection to the server will be facilitated by the Python Open Data Base Connectivity (Pyodbc).
+The mainframe of the UI shall be compatible with SQL Server Management Studio (SSMS) and ran in a Windows platform.
+
+For the update status form there are 4 forms that will need to automatically call the Update Status form. These are:
+
+	- Pending Development
+	- Development
+	- Peer review input 
+	- Busniess Review input
+	
+Split work into 3 parts 
+1. Configuration page
+	DB Connection Setup
+2. Store Procedures Internal DB Access
+3. 12 pages to be configured
+	
+Use PYODBC to write T-SQL commands
+
+
+FRONT END DEVELOPMENT
+
+1.	The UI will have a master class which be called by other forms within the UI
+2.	Buttons that are present throughout all the forms will be referenced to this master class
+	•	Submit button
+	•	Back Button
+3.	Also, this class will be in charge of creating the home page or menu of the User Interface
+4.	Lastly, the master class will support the user's access to several forms
+
+
