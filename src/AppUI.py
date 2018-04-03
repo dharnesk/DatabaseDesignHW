@@ -100,7 +100,7 @@ def on_submit_add_level_of_effort(parent, item_id, estimate, developer):
     procedures.add_level_of_effort(item_id, estimate, developer)
     connection.close()
 
-def on_submit_add_developer(item_id, estimate, comment, reviewer, est_delivery, parent):
+def on_submit_add_developer_review(item_id, estimate, comment, reviewer, est_delivery, parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     procedures = ReportingDeveloperHelperFunctions(connection.cursor())
@@ -128,14 +128,14 @@ class AppUI(tk.Tk):
         notebook.add(FormTwo(self), text="Pending Review")
         notebook.add(FormThree(self), text="Assigned Input")
         notebook.add(FormFour(self), text="Pending Development")
-        notebook.add(FormFive(self), text="Development Input")
+        notebook.add(FormFive(self), text="Add Developer")
         notebook.add(FormSix(self), text="Peer Review")
         notebook.add(BusinessReviewInputForm(self), text="Business Review")
         notebook.add(FormEight(self), text="Update Status")
         notebook.add(FormNine(self), text="Request Review")
         notebook.add(FormTen(self), text="Add Note")
         notebook.add(FormEleven(self), text="Level of Effort")
-        notebook.add(FormTwelve(self), text="Add a Developer")
+        notebook.add(FormTwelve(self), text="Development Input")
         notebook.pack()
 
     def set_server_name(self, server_name):
@@ -276,7 +276,7 @@ class FormFive(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="Development Input Form")
+        label = tk.Label(self, text="Add Developer Form")
         label.pack()
 
         e = tk.Entry(self)
@@ -510,7 +510,7 @@ class FormTwelve(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="Add a Developer Input Form")
+        label = tk.Label(self, text="Development Input Form")
         label.pack()
 
         label2 = tk.Label(self, text="Item ID")
@@ -552,7 +552,7 @@ class FormTwelve(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_developer(item_id.get(), estimate.get(),
+                           command=lambda: on_submit_add_developer_review(item_id.get(), estimate.get(),
                                         comment.get(), reviewer.get(), est_delivery.get(), parent))
         button.pack(pady=10)
 
