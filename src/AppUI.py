@@ -191,28 +191,33 @@ class ConfigurationPage(ttk.Frame):
         button.pack(pady=10)
 
 
-
+#TODO: Me
 class FormOne(ttk.Frame):
     """
     :param int item_id:
-    :param:
-    :param:
-    :param:
-    :param:
+    :param bool approval:
+    :param char comment:
+    :param date reviewed on:
+    :param char reviewer:
     """
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         #Form Title
         label = tk.Label(self, text="Report Request Input Form")
         label.pack(pady=10)
-        # Text Entry Field Title
-        label2 = tk.Label(self, text="Text Entry Field Title")
+        # Item ID
+        label2 = tk.Label(self, text="Request ID")
         label2.pack()
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
 
-        # Text Entry Field
-        field1 = tk.Entry(self)
-        field1.pack()
-        field1.focus_set()
+        # Approval
+        label2 = tk.Label(self, text="Approval")
+        label2.pack()
+        approval = tk.Entry(self)
+        approval.pack()
+        approval.focus_set()
 
         # Submit Button
         button = tk.Button(self,
@@ -546,7 +551,7 @@ class FormEleven(ttk.Frame):
         label3.pack()
         entry_date = tk.Entry(self)
         #TODO: Properly format time
-        #entry_date.insert("end", datetime.datetime())
+        entry_date.insert("end", datetime.datetime.now())
         entry_date.pack()
         entry_date.focus_set()
 
