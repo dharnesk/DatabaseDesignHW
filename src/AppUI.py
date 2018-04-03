@@ -117,18 +117,18 @@ class AppUI(tk.Tk):
         # Initialize the Notebook and all of its Forms
         notebook = ttk.Notebook(container)
         notebook.add(ConfigurationPage(self), text='Configuration')
-        notebook.add(FormOne(self), text="Report Request Input Form")
-        notebook.add(FormTwo(self), text="Form Two")
-        notebook.add(FormThree(self), text="Form Three")
-        notebook.add(FormFour(self), text="Form Four")
-        notebook.add(FormFive(self), text="Form Five")
-        notebook.add(FormSix(self), text="Form Six")
+        notebook.add(FormOne(self), text="Report Request")
+        notebook.add(FormTwo(self), text="Pending Review")
+        notebook.add(FormThree(self), text="Assigned")
+        notebook.add(FormFour(self), text="Pending Development")
+        notebook.add(FormFive(self), text="Development Input")
+        notebook.add(FormSix(self), text="Peer Review")
         notebook.add(BusinessReviewInputForm(self), text="Business Review")
-        notebook.add(FormEight(self), text="Form Eight")
-        notebook.add(FormNine(self), text="Form Nine")
-        notebook.add(FormTen(self), text="Form Ten")
-        notebook.add(FormEleven(self), text="Form Eleven")
-        notebook.add(FormTwelve(self), text="Form Twelve")
+        notebook.add(FormEight(self), text="Update Status")
+        notebook.add(FormNine(self), text="Request Review")
+        notebook.add(FormTen(self), text="Add Note")
+        notebook.add(FormEleven(self), text="Level of Effort")
+        notebook.add(FormTwelve(self), text="Add a Developer")
         notebook.pack()
 
     def set_server_name(self, server_name):
@@ -415,12 +415,41 @@ class FormEleven(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="Add Level of Effort Input Form")
-        label.pack()
+        label1 = tk.Label(self, text="Add Level of Effort Input Form")
+        label1.pack(pady=10)
+        # Item_ID Entry
+        label1 = tk.Label(self, text="Request ID Number")
+        label1.pack()
+        e1 = tk.Entry(self)
+        e1.insert("end", '1234')
+        e1.pack()
+        e1.focus_set()
 
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+        # Estimate Entry
+        label2 = tk.Label(self, text="Effort Estimate")
+        label2.pack()
+        e2 = tk.Entry(self)
+        e2.insert("end", '40')
+        e2.pack()
+        e2.focus_set()
+
+        # Add_Date format='' 
+        label3 = tk.Label(self, text="Date")
+        label3.pack()
+        e3 = tk.Entry(self)
+        e3.insert("end", datetime)  # TODO: Im definetley wonr on this
+        e3.pack()
+        e3.focus_set()
+
+        # Developer Entry
+        label4 = tk.Label(self, text="Developer")
+        label4.pack()
+        e4 = tk.Entry(self)
+        e4.insert("end", 'Bobby Bearcat')
+        e4.pack()
+        e4.focus_set()
+
+        # Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
@@ -437,9 +466,9 @@ class FormTwelve(ttk.Frame):
         label = tk.Label(self, text="Add a Developer Input Form")
         label.pack()
 
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+        e1 = tk.Entry(self)
+        e1.pack()
+        e1.focus_set()
         #Submit Button
         button = tk.Button(self,
                            text="Submit",
