@@ -13,9 +13,11 @@ class ConfigInterface:
         self.database = 'Reporting_developer'
         self.connection = ""
 
-    def connect(self, server_name):
+    def connect(self, server_name, driver='ODBC Driver 13 for SQL Server'):
+        if driver == '':
+            driver = 'ODBC Driver 13 for SQL Server'
         self.connection = pyodbc.connect(
-            r'DRIVER={ODBC Driver 13 for SQL Server};'
+            r'DRIVER={'+driver+'};'
             r'SERVER=' + server_name + ';'
             r'DATABASE=' + self.database + ';'
             r'Trusted_Connection=yes;'
@@ -202,7 +204,7 @@ class ReportingDeveloperHelperFunctions:
         :param reviewer: fk varchar(30) username of reviewer
         :return: none
         """
-
+        reviewed = datetime.datetime.now()
         reviewed = reviewed.strftime('%Y-%m-%d %H:%M:%S')
         if reviewer is None:
             reviewer = self.get_truncated_username()
@@ -343,7 +345,8 @@ class ReportingDeveloperHelperFunctions:
         # Get current status of item
         self.cursor.execute("select [status] from work.items where id = '{}'".format(item_id))
         status = self.cursor.fetchall()[0][0]
-
+        print(status)
+        print(next_status)
         # Check if status change exists
         if not self.get_status_exists(status, next_status):
             raise Exception('Changes not applied: ' + next_status + ' is not a valid state following ' + status +
@@ -411,30 +414,30 @@ class ReportingDeveloperHelperFunctions:
 
     def is_request_reviewed(self, item_id, last_status_date):
         statement = """select * from work.request_reviews 
-                    where item_id = '{}' and approval = 1 and reviewed > '{}'""".format(
+                    where item_id = '{}' and approval = 1 and reviewed < '{}'""".format(
                     item_id, last_status_date)
         return self.entry_exists(statement)
 
     def is_developer_assigned(self, item_id, last_status_date):
         statement = """select * from work.assignments 
-                    where item_id = '{}' and assigned > '{}'""".format(
+                    where item_id = '{}' and assigned < '{}'""".format(
                     item_id, last_status_date)
         return self.entry_exists(statement)
 
     def is_level_of_effort_assigned(self, item_id, last_status_date):
         statement = """select * from work.developer_review 
-                    where item_id = '{}' and added > '{}'""".format(
+                    where item_id = '{}' and added < '{}'""".format(
                     item_id, last_status_date)
         return self.entry_exists(statement)
 
     def is_work_peer_reviewed(self, item_id, last_status_date):
         statement = """select * from work.peer_reviews 
-                    where item_id = '{}' and approval = 1 and reviewed > '{}'""".format(
+                    where item_id = '{}' and approval = 1 and reviewed < '{}'""".format(
                     item_id, last_status_date)
         return self.entry_exists(statement)
 
     def is_business_review_completed(self, item_id, last_status_date):
         statement = """select * from work.business_reviews 
-                    where item_id = '{}' and approval = 1 and reviewed > '{}'""".format(
+                    where item_id = '{}' and approval = 1 and reviewed < '{}';""".format(
                     item_id, last_status_date)
         return self.entry_exists(statement)

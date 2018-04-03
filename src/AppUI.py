@@ -17,7 +17,7 @@ from src.reporting_developer_interface import *
 #and perform whatever work needs to be done for that forms input/data
 
 CONNECT_ATTEMPT = 0
-def on_connect_pressed(server_name, label_success, label_failed, parent):
+def on_connect_pressed(server_name, label_success, label_failed, driver, parent):
     """
     Attempts to make a connection to the supplied DB server
     """
@@ -27,7 +27,7 @@ def on_connect_pressed(server_name, label_success, label_failed, parent):
     try:
         label_failed.pack_forget()
         if server_name != "" and CONNECT_ATTEMPT == 0:
-            connection = config.connect(server_name)
+            connection = config.connect(server_name, driver)
             label_success.pack()
             CONNECT_ATTEMPT += 1
             connection.close()
@@ -65,16 +65,21 @@ def on_submit_assigned_input(parent, item_id, assignee, assigner):
     procedures.assign_form_procedure(item_id, assignee, assigner)
     connection.close()
 
-#TODO
-def on_submit_pending_development_input(parent):
+
+def on_submit_pending_development_input(parent, item_id, estimate, comment, reviewer):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperFormProcedures(connection.cursor())
+    procedures.pending_development_form_procedure(item_id, estimate, comment, reviewer)
     connection.close()
 
-#TODO
-def on_submit_add_developer(parent):
+
+def on_submit_add_developer(parent, name, manager):
     config = ConfigInterface()
-    #connection.close()
+    connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperFormProcedures(connection.cursor())
+    procedures.add_developer_form_procedure(name, manager)
+    connection.close()
 
 def on_submit_peer_review_input(parent, item_id, approval, comment):
     config = ConfigInterface()
@@ -84,9 +89,11 @@ def on_submit_peer_review_input(parent, item_id, approval, comment):
     connection.close()
 
 #TODO
-def on_submit_update_status_input(parent):
+def on_submit_update_status_input(parent, item_id, next_status):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperFormProcedures(connection.cursor())
+    procedures.update_status_form_procedure(item_id, next_status)
     connection.close()
 
 def on_submit_request_review_input(item_id, approval, comment, parent):
@@ -100,7 +107,7 @@ def on_submit_add_note_input(item_id, note, parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     procedures = ReportingDeveloperFormProcedures(connection.cursor())
-    procedures.add_developer_form_procedure(item_id, note)
+    procedures.add_note_form_procedure(item_id, note)
     connection.close()
 
 def on_submit_add_level_of_effort(parent, item_id, estimate, developer):
@@ -110,11 +117,11 @@ def on_submit_add_level_of_effort(parent, item_id, estimate, developer):
     procedures.add_level_of_effort_form_procedure(item_id, estimate, developer)
     connection.close()
 
-def on_submit_add_developer_review(item_id, estimate, comment, reviewer, est_delivery, parent):
+def on_submit_development_input(item_id, parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     procedures = ReportingDeveloperFormProcedures(connection.cursor())
-    procedures.pending_development_form_procedure(item_id, estimate, comment, reviewer, est_delivery)
+    procedures.development_form_procedure(item_id)
     connection.close()
 
 
@@ -176,14 +183,15 @@ class ConfigurationPage(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
-#
-#        label3 = tk.Label(self, text="Driver")
-#        label3.pack()
-#
-#        e2 = tk.Entry(self)
-#        e2.pack()
-#        e2.focus_set()
-#
+
+        label3 = tk.Label(self, text="Driver")
+        label3.pack()
+
+        e2 = tk.Entry(self)
+        e2.insert(0, 'ODBC Driver 13 for SQL Server')
+        e2.pack()
+        e2.focus_set()
+
         label_success = tk.Label(self, text="Connection Successful")
         label_failed = tk.Label(self, text="Connection Failed")
         button = tk.Button(self,
@@ -191,7 +199,7 @@ class ConfigurationPage(ttk.Frame):
                            fg="red",
                            command=lambda: on_connect_pressed(e.get(),
                                                               label_success,
-                                                              label_failed,
+                                                              label_failed, e2.get(),
                                                               parent)
                           )
         button.pack(pady=10)
@@ -368,19 +376,46 @@ class FormFour(ttk.Frame):
         label = tk.Label(self, text="Pending Development Input Form")
         label.pack()
 
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+        label2 = tk.Label(self, text="Item ID")
+        label2.pack()
+
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
+
+        label3 = tk.Label(self, text="Estimate")
+        label3.pack()
+
+        estimate = tk.Entry(self)
+        estimate.pack()
+        estimate.focus_set()
+
+        label4 = tk.Label(self, text="Comment")
+        label4.pack()
+
+        comment = tk.Entry(self)
+        comment.pack()
+        comment.focus_set()
+
+        label5 = tk.Label(self, text="Reviewer")
+        label5.pack()
+
+        reviewer = tk.Entry(self)
+        reviewer.pack()
+        reviewer.focus_set()
+
+
         #Submit Button
         button = tk.Button(self,
                            text="Submit",
-                           fg="red",
-                           command=lambda: on_submit_pending_development_input(parent)
+                       fg="red",
+                           command=lambda: on_submit_pending_development_input(parent, item_id.get(),
+                                                                               estimate.get(), comment.get(), reviewer.get())
                           )
         button.pack(pady=10)
 
 
-#TODO: Me too
+
 class FormFive(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
@@ -388,16 +423,23 @@ class FormFive(ttk.Frame):
         label = tk.Label(self, text="Add Developer Input Form")
         label.pack(pady=10)
 
-        label2 = tk.Label(self, text="New Developer")
+        label2 = tk.Label(self, text="Name")
         label2.pack()
-        developer = tk.Entry(self)
-        developer.pack()
-        developer.focus_set()
+        name = tk.Entry(self)
+        name.pack()
+        name.focus_set()
+
+        label3 = tk.Label(self, text="Manager")
+        label3.pack()
+        manager = tk.Entry(self)
+        manager.pack()
+        manager.focus_set()
+
         #Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_developer(parent, developer.get())
+                           command=lambda: on_submit_add_developer(parent, name.get(), manager.get())
                           )
         button.pack(pady=10)
 
@@ -488,14 +530,24 @@ class FormEight(ttk.Frame):
         label = tk.Label(self, text="Update Status Input Form")
         label.pack()
 
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+        label2 = tk.Label(self, text="item ID")
+        label2.pack()
+
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
+
+        label3 = tk.Label(self, text="Next Status (Complete/Closed)")
+        label3.pack()
+
+        next_status = tk.Entry(self)
+        next_status.pack()
+        next_status.focus_set()
 
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_update_status_input(parent))
+                           command=lambda: on_submit_update_status_input(parent, item_id.get(), next_status.get()))
         button.pack(pady=10)
 
 class FormNine(ttk.Frame):
@@ -598,7 +650,6 @@ class FormEleven(ttk.Frame):
         label1 = tk.Label(self, text="Request ID Number")
         label1.pack()
         item_id = tk.Entry(self)
-        item_id.insert("end", '1234')
         item_id.pack()
         item_id.focus_set()
 
@@ -606,7 +657,6 @@ class FormEleven(ttk.Frame):
         label2 = tk.Label(self, text="Effort Estimate")
         label2.pack()
         estimate = tk.Entry(self)
-        estimate.insert("end", '40')
         estimate.pack()
         estimate.focus_set()
 
@@ -614,7 +664,6 @@ class FormEleven(ttk.Frame):
         label4 = tk.Label(self, text="Developer")
         label4.pack()
         developer = tk.Entry(self)
-        developer.insert("end", 'Bobby Bearcat')
         developer.pack()
         developer.focus_set()
 
@@ -647,42 +696,11 @@ class FormTwelve(ttk.Frame):
         item_id.pack()
         item_id.focus_set()
 
-        label3 = tk.Label(self, text="Estimate")
-        label3.pack()
-
-        estimate = tk.Entry(self)
-        estimate.pack()
-        estimate.focus_set()
-
-        label4 = tk.Label(self, text="Comment")
-        label4.pack()
-
-        comment = tk.Entry(self)
-        comment.pack()
-        comment.focus_set()
-
-        label5 = tk.Label(self, text="Reviewer")
-        label5.pack()
-
-        reviewer = tk.Entry(self)
-        reviewer.pack()
-        reviewer.focus_set()
-
-        label6 = tk.Label(self, text="Estimated Delivery")
-        label6.pack()
-
-        est_delivery = tk.Entry(self)
-        est_delivery.pack()
-        est_delivery.focus_set()
-
         #Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_developer_review(item_id.get(), estimate.get(),
-                                                                          comment.get(), reviewer.get(),
-                                                                          est_delivery.get(), parent
-                                                                         )
+                           command=lambda: on_submit_development_input(item_id.get(), parent)
                           )
         button.pack(pady=10)
 
