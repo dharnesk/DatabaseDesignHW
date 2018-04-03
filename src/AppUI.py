@@ -81,9 +81,11 @@ def on_submit_update_status_input(parent):
     connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_request_review_input(parent):
+def on_submit_request_review_input(item_id, approval, comment, reviewer, parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperHelperFunctions(connection.cursor())
+    procedures.add_request_review(item_id, approval, comment, reviewer)
     connection.close()
 
 def on_submit_add_note_input(item_id, note, parent):
@@ -404,17 +406,43 @@ class FormNine(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="Request Review Input Form")
+        label = tk.Label(self, text="Request Review Input Form")  #item_id, approval, comment, reviewer
         label.pack()
 
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+        label2 = tk.Label(self, text="Item ID")
+        label2.pack()
+
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
+
+        label3 = tk.Label(self, text="Approval")
+        label3.pack()
+
+        approval = tk.Entry(self)
+        approval.pack()
+        approval.focus_set()
+
+        label5 = tk.Label(self, text="Comment")
+        label5.pack()
+
+        comment = tk.Entry(self)
+        comment.pack()
+        comment.focus_set()
+
+        label4 = tk.Label(self, text="Reviewer")
+        label4.pack()
+
+        reviewer = tk.Entry(self)
+        reviewer.pack()
+        reviewer.focus_set()
+
         # Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_request_review_input(parent))
+                           command=lambda: on_submit_request_review_input(item_id.get(), approval.get(),
+                                                            comment.get(), reviewer.get(), parent))
         button.pack(pady=10)
 
 class FormTen(ttk.Frame):

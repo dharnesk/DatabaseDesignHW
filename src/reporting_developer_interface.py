@@ -192,7 +192,7 @@ class ReportingDeveloperHelperFunctions:
                             VALUES('{}','{}','{}','{}','{}')""".format
                             (item_id, approval, comment, reviewer, reviewed))
 
-    def add_request_review(self, item_id, approval, comment, reviewed=datetime.datetime.now(), reviewer=None):
+    def add_request_review(self, item_id, approval, comment, reviewer=None, reviewed=datetime.datetime.now()):
         """
         :param item_id: fk int item id
         :param approval: int 0 or 1 for approval
