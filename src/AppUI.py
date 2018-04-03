@@ -54,9 +54,11 @@ def on_submit_pending_review(parent):
     connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_assigned_input(parent):
+def on_submit_assigned_input(parent, item_id, assignee, entry_date, assigner):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperHelperFunctions(connection.cursor())
+    procedures.assign_item(item_id, assignee, entry_date, assigner)
     connection.close()
 
 def on_submit_pending_development_input(parent):
