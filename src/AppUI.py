@@ -27,16 +27,10 @@ def on_connect_pressed(server_name, label_success, label_failed, parent):
     try:
         label_failed.pack_forget()
         if server_name != "" and CONNECT_ATTEMPT == 0:
-<<<<<<< HEAD
-            label_success.pack()
-            CONNECT_ATTEMPT += 1
-        connection.close()
-=======
             connection = config.connect(server_name)
             label_success.pack()
             CONNECT_ATTEMPT += 1
             connection.close()
->>>>>>> 1fe080f6cec9826896983ae18e4856301467bf75
     except:
         CONNECT_ATTEMPT = 0
         label_success.pack_forget()
@@ -124,20 +118,13 @@ class AppUI(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
         self.server_name = ""
         self.winfo_toplevel().title("Reporting Developer GUI")
-<<<<<<< HEAD
-        # Initialize the Notebook and all of its Forms
-=======
 
->>>>>>> 1fe080f6cec9826896983ae18e4856301467bf75
+        # Initialize the Notebook and all of its Forms
         notebook = ttk.Notebook(container)
         notebook.add(ConfigurationPage(self), text='Configuration')
         notebook.add(FormOne(self), text="Report Request")
         notebook.add(FormTwo(self), text="Pending Review")
-<<<<<<< HEAD
-        notebook.add(FormThree(self), text="Assigned")
-=======
         notebook.add(FormThree(self), text="Assigned Input")
->>>>>>> 1fe080f6cec9826896983ae18e4856301467bf75
         notebook.add(FormFour(self), text="Pending Development")
         notebook.add(FormFive(self), text="Development Input")
         notebook.add(FormSix(self), text="Peer Review")
@@ -145,13 +132,8 @@ class AppUI(tk.Tk):
         notebook.add(FormEight(self), text="Update Status")
         notebook.add(FormNine(self), text="Request Review")
         notebook.add(FormTen(self), text="Add Note")
-<<<<<<< HEAD
         notebook.add(FormEleven(self), text="Level of Effort")
         notebook.add(FormTwelve(self), text="Add a Developer")
-=======
-        notebook.add(FormEleven(self), text="Add lvl Effort")
-        notebook.add(FormTwelve(self), text="Add Developer")
->>>>>>> 1fe080f6cec9826896983ae18e4856301467bf75
         notebook.pack()
 
     def set_server_name(self, server_name):
@@ -304,16 +286,6 @@ class FormSix(ttk.Frame):
         label = tk.Label(self, text="Peer Review Input Form")
         label.pack()
 
-<<<<<<< HEAD
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
-        #Submit button
-        button = tk.Button(self,
-                           text="Submit",
-                           fg="red",
-                           command=lambda: on_submit_peer_review_input(parent)
-=======
         label2 = tk.Label(self, text="Item ID")
         label2.pack()
 
@@ -339,7 +311,6 @@ class FormSix(ttk.Frame):
                            text="Submit",
                            fg="red",
                            command=lambda: on_submit_peer_review_input(parent, item_id.get(), approval.get(), comment.get())
->>>>>>> 1fe080f6cec9826896983ae18e4856301467bf75
                           )
         button.pack(pady=10)
 
@@ -376,20 +347,12 @@ class BusinessReviewInputForm(ttk.Frame):
         comment = tk.Entry(self)
         comment.pack()
         comment.focus_set()
-<<<<<<< HEAD
+
         #Submit button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
                            command=lambda: on_submit_business_review(item_id, approval, reviewer, comment, "", parent)
-=======
-
-        button = tk.Button(self,
-                           text="Submit",
-                           fg="red",
-                           command=lambda: on_submit_business_review(item_id.get(),
-                                approval.get(), reviewer.get(), comment.get(), parent)
->>>>>>> 1fe080f6cec9826896983ae18e4856301467bf75
                           )
         button.pack(pady=10)
 
