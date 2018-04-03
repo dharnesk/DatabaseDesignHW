@@ -40,13 +40,6 @@ def on_connect_pressed(server_name, label_success, label_failed, parent):
 def on_submit_report_request(parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
-    cursor = connection.cursor()
-    #do stuff related to form one
-    #procedures = ReportingDeveloperFormProcedures(cursor)
-    #procedures.helper.add_peer_review(1, 1, "")
-    sql_command = ("SELECT status, added_by, added, row_version FROM work.statuses")
-    cursor.execute(sql_command)
-    results = cursor.fetchone() #test
     connection.close()
 
 def on_submit_business_review(item_id, approval, reviewer, comment, parent):
@@ -71,7 +64,7 @@ def on_submit_pending_development_input(parent):
     connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_development_input(parent):
+def on_submit_add_developer(parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     connection.close()
@@ -88,24 +81,32 @@ def on_submit_update_status_input(parent):
     connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_request_review_input(parent):
+def on_submit_request_review_input(item_id, approval, comment, reviewer, parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperHelperFunctions(connection.cursor())
+    procedures.add_request_review(item_id, approval, comment, reviewer)
     connection.close()
 
-def on_submit_add_note_input(parent):
+def on_submit_add_note_input(item_id, note, parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperHelperFunctions(connection.cursor())
+    procedures.add_note(item_id, note)
     connection.close()
 
-def on_submit_add_level_of_effort(parent):
+def on_submit_add_level_of_effort(parent, item_id, estimate, developer):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperHelperFunctions(connection.cursor())
+    procedures.add_level_of_effort(item_id, estimate, developer)
     connection.close()
 
-def on_submit_add_developer(parent):
+def on_submit_add_developer_review(item_id, estimate, comment, reviewer, est_delivery, parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperHelperFunctions(connection.cursor())
+    procedures.add_developer_review(item_id, estimate, comment, reviewer)
     connection.close()
 
 
@@ -129,14 +130,14 @@ class AppUI(tk.Tk):
         notebook.add(FormTwo(self), text="Pending Review")
         notebook.add(FormThree(self), text="Assigned Input")
         notebook.add(FormFour(self), text="Pending Development")
-        notebook.add(FormFive(self), text="Development Input")
+        notebook.add(FormFive(self), text="Add Developer")
         notebook.add(FormSix(self), text="Peer Review")
         notebook.add(BusinessReviewInputForm(self), text="Business Review")
         notebook.add(FormEight(self), text="Update Status")
         notebook.add(FormNine(self), text="Request Review")
         notebook.add(FormTen(self), text="Add Note")
         notebook.add(FormEleven(self), text="Level of Effort")
-        notebook.add(FormTwelve(self), text="Add a Developer")
+        notebook.add(FormTwelve(self), text="Development Input")
         notebook.pack()
 
     def set_server_name(self, server_name):
@@ -287,7 +288,7 @@ class FormFive(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_development_input(parent)
+                           command=lambda: on_submit_add_developer(parent)
                           )
         button.pack(pady=10)
 
@@ -404,17 +405,43 @@ class FormNine(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="Request Review Input Form")
+        label = tk.Label(self, text="Request Review Input Form")  #item_id, approval, comment, reviewer
         label.pack()
 
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+        label2 = tk.Label(self, text="Item ID")
+        label2.pack()
+
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
+
+        label3 = tk.Label(self, text="Approval")
+        label3.pack()
+
+        approval = tk.Entry(self)
+        approval.pack()
+        approval.focus_set()
+
+        label5 = tk.Label(self, text="Comment")
+        label5.pack()
+
+        comment = tk.Entry(self)
+        comment.pack()
+        comment.focus_set()
+
+        label4 = tk.Label(self, text="Reviewer")
+        label4.pack()
+
+        reviewer = tk.Entry(self)
+        reviewer.pack()
+        reviewer.focus_set()
+
         # Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_request_review_input(parent))
+                           command=lambda: on_submit_request_review_input(item_id.get(), approval.get(),
+                                                            comment.get(), reviewer.get(), parent))
         button.pack(pady=10)
 
 class FormTen(ttk.Frame):
@@ -426,13 +453,25 @@ class FormTen(ttk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Add Note Input Form")
         label.pack()
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+
+        label2 = tk.Label(self, text="Item ID")
+        label2.pack()
+
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
+
+        label3 = tk.Label(self, text="Note")
+        label3.pack()
+
+        note = tk.Entry(self)
+        note.pack()
+        note.focus_set()
+
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_note_input(parent))
+                           command=lambda: on_submit_add_note_input(item_id.get(), note.get(), parent))
         button.pack(pady=10)
 
 class FormEleven(ttk.Frame):
@@ -488,7 +527,7 @@ class FormEleven(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_level_of_effort(parent))
+                           command=lambda: on_submit_add_level_of_effort(parent, e1.get(), e2.get(), e4.get()))
         button.pack(pady=10)
 
 class FormTwelve(ttk.Frame):
@@ -498,17 +537,50 @@ class FormTwelve(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="Add a Developer Input Form")
+        label = tk.Label(self, text="Development Input Form")
         label.pack()
 
-        e1 = tk.Entry(self)
-        e1.pack()
-        e1.focus_set()
+        label2 = tk.Label(self, text="Item ID")
+        label2.pack()
+
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
+
+        label3 = tk.Label(self, text="Estimate")
+        label3.pack()
+
+        estimate = tk.Entry(self)
+        estimate.pack()
+        estimate.focus_set()
+
+        label4 = tk.Label(self, text="Comment")
+        label4.pack()
+
+        comment = tk.Entry(self)
+        comment.pack()
+        comment.focus_set()
+
+        label5 = tk.Label(self, text="Reviewer")
+        label5.pack()
+
+        reviewer = tk.Entry(self)
+        reviewer.pack()
+        reviewer.focus_set()
+
+        label6 = tk.Label(self, text="Estimated Delivery")
+        label6.pack()
+
+        est_delivery = tk.Entry(self)
+        est_delivery.pack()
+        est_delivery.focus_set()
+
         #Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_developer(parent))
+                           command=lambda: on_submit_add_developer_review(item_id.get(), estimate.get(),
+                                        comment.get(), reviewer.get(), est_delivery.get(), parent))
         button.pack(pady=10)
 
 def main():
