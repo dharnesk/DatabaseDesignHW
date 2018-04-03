@@ -220,11 +220,22 @@ class ReportingDeveloperHelperFunctions:
                             VALUES('{}','{}','{}','{}')""".format
                             (item_id, assignee, assigner, assigned))
 
+    def update_requested_to_reviewed(self, item_id):
+        """
+        :param item_id: int fk item id
+        :return: none
+        """
+        self.cursor.execute("""update work.request_reviews
+                            Set approval = 1, comment = 'reviewed', reviewed = getdate()
+                            where item_id = '{}'""".format
+                            (item_id))
+
 
 def main():
     interface = ConfigInterface()
 
     procedures = ReportingDeveloperHelperFunctions(interface.cursor)
+    procedures.update_requested_to_reviewed(2010)
     # To test:
 
     # Successfully tested:
