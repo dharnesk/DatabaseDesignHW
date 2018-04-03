@@ -38,8 +38,6 @@ class ReportingDeveloperFormProcedures:
         self.helper.review_request()
         self.helper.update_status()
 
-    def assign_form_procedure(self):
-        self.helper.assign_item()
         self.helper.update_status()
 
     def pending_development_form_procedure(self):

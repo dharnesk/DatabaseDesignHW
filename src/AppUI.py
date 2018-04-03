@@ -13,7 +13,7 @@ import tkinter as tk
 from tkinter import ttk
 #from src.reporting_developer_interface import *
 
-#We can change this, but this does work. Simply add functions to establish a connection for each form
+#We can change this,but this does work. Simply add functions to establish a connection for each form
 #and perform whatever work needs to be done for that forms input/data
 
 CONNECT_ATTEMPT = 0
@@ -95,11 +95,11 @@ def on_submit_add_note_input(item_id, note, parent):
     procedures.add_note(item_id, note)
     connection.close()
 
-def on_submit_add_level_of_effort(parent, item_id, estimate, developer):
+def on_submit_add_level_of_effort(parent, item_id, estimate, entry_date, developer):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     procedures = ReportingDeveloperHelperFunctions(connection.cursor())
-    procedures.add_level_of_effort(item_id, estimate, developer)
+    procedures.add_level_of_effort(item_id, estimate, entry_date, developer)
     connection.close()
 
 def on_submit_add_developer_review(item_id, estimate, comment, reviewer, est_delivery, parent):
@@ -452,7 +452,7 @@ class FormTen(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Add Note Input Form")
-        label.pack()
+        label.pack(pady=10)
 
         label2 = tk.Label(self, text="Item ID")
         label2.pack()
@@ -494,40 +494,47 @@ class FormEleven(ttk.Frame):
         # Item_ID Entry
         label1 = tk.Label(self, text="Request ID Number")
         label1.pack()
-        e1 = tk.Entry(self)
-        e1.insert("end", '1234')
-        e1.pack()
-        e1.focus_set()
+        item_id = tk.Entry(self)
+        item_id.insert("end", '1234')
+        item_id.pack()
+        item_id.focus_set()
 
         # Estimate Entry
         label2 = tk.Label(self, text="Effort Estimate")
         label2.pack()
-        e2 = tk.Entry(self)
-        e2.insert("end", '40')
-        e2.pack()
-        e2.focus_set()
+        estimate = tk.Entry(self)
+        estimate.insert("end", '40')
+        estimate.pack()
+        estimate.focus_set()
 
         # Add_Date format='' 
         label3 = tk.Label(self, text="Date")
         label3.pack()
-        e3 = tk.Entry(self)
-        e3.insert("end", datetime)  # TODO: Im definetley wonr on this
-        e3.pack()
-        e3.focus_set()
+        entry_date = tk.Entry(self)
+        #TODO: Properly format time
+        entry_date.insert("end", datetime.datetime())
+        entry_date.pack()
+        entry_date.focus_set()
 
         # Developer Entry
         label4 = tk.Label(self, text="Developer")
         label4.pack()
-        e4 = tk.Entry(self)
-        e4.insert("end", 'Bobby Bearcat')
-        e4.pack()
-        e4.focus_set()
+        developer = tk.Entry(self)
+        developer.insert("end", 'Bobby Bearcat')
+        developer.pack()
+        developer.focus_set()
 
         # Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_level_of_effort(parent, e1.get(), e2.get(), e4.get()))
+                           command=lambda: on_submit_add_level_of_effort(parent, item_id.get(),
+                                                                         estimate.get(),
+                                                                         entry_date.get(),
+                                                                         developer.get()
+                                                                        )
+                          )
+
         button.pack(pady=10)
 
 class FormTwelve(ttk.Frame):
@@ -580,7 +587,10 @@ class FormTwelve(ttk.Frame):
                            text="Submit",
                            fg="red",
                            command=lambda: on_submit_add_developer_review(item_id.get(), estimate.get(),
-                                        comment.get(), reviewer.get(), est_delivery.get(), parent))
+                                                                          comment.get(), reviewer.get(),
+                                                                          est_delivery.get(), parent
+                                                                         )
+                          )
         button.pack(pady=10)
 
 def main():
