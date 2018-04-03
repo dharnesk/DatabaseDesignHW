@@ -110,6 +110,9 @@ def on_submit_add_developer(parent):
 
 
 class AppUI(tk.Tk):
+    """
+    Documentation is my Dream.
+    """
     def __init__(self):
         tk.Tk.__init__(self)
         container = tk.Frame(self)
@@ -137,13 +140,22 @@ class AppUI(tk.Tk):
         notebook.pack()
 
     def set_server_name(self, server_name):
+        """
+        Get Server Name
+        """
         self.server_name = server_name
 
     def get_server_name(self):
+        """
+        Set Server Name
+        """
         return self.server_name
 
 
 class ConfigurationPage(ttk.Frame):
+    """
+    Documentation is my Dream.
+    """
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Configuration Page")
@@ -179,7 +191,7 @@ class ConfigurationPage(ttk.Frame):
 
 class FormOne(ttk.Frame):
     """
-    :param item_id:
+    :param int item_id:
     :param:
     :param:
     :param:
