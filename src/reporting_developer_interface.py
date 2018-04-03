@@ -35,7 +35,7 @@ class ReportingDeveloperFormProcedures:
         self.helper.add_request_review()
 
     def pending_review_form_procedure(self):
-        self.helper.review_request()
+        self.helper.change_review_pending_request()
         self.helper.update_status()
 
     def assign_form_procedure(self):
@@ -82,12 +82,6 @@ class ReportingDeveloperHelperFunctions:
     def __init__(self, cursor):
         self.cursor = cursor
 
-    def update_status(self):
-        print("Placeholder function")
-
-    def add_developer(self):
-        print("Placeholder function")
-
     def get_truncated_username(self):
         """
         :return: truncated system user name string
@@ -97,7 +91,6 @@ class ReportingDeveloperHelperFunctions:
 
     def add_business_review(self, item_id, approval, reviewer, comment, reviewed=datetime.datetime.now()):
         """
-
         :param item_id: fk int from work.items column
         :param approval: 0 or 1 integer
         :param reviewer: string name of reviewer
@@ -148,7 +141,6 @@ class ReportingDeveloperHelperFunctions:
         if not reviewer:
             reviewer = self.get_truncated_username()
         added = added.strftime('%Y-%m-%d %H:%M:%S')
-        print(est_delivery)
         self.cursor.execute("""insert into work.developer_review 
                             (item_id, estimate, comment, reviewer, added, est_delivery) 
                             values('{}','{}','{}','{}','{}','{}')""". format(
@@ -231,7 +223,7 @@ class ReportingDeveloperHelperFunctions:
                             VALUES('{}','{}','{}','{}')""".format
                             (item_id, assignee, assigner, assigned))
 
-    def review_request(self, item_id, approval, comment, reviewed=datetime.datetime.now()):
+    def change_review_pending_request(self, item_id, approval, comment, reviewed=datetime.datetime.now()):
         """
         :param item_id: int fk item id
         :param approval: int 0 or 1 approval
@@ -245,11 +237,128 @@ class ReportingDeveloperHelperFunctions:
                             where item_id = '{}'""".format
                             (approval, comment, reviewed, item_id))
 
+    def add_developer(self, name, manager):
+        """
+        :param name: varchar(128) name of developer
+        :param manager: varchar(100) name of manager
+        :return: none
+        """
+        added_by = self.get_truncated_username()
+        self.cursor.execute("""insert into work.developers (id,name,manager, added_by) 
+                               values ('{}', '{}', '{}', '{}')""".format
+                            (added_by, name, manager, added_by))
+
+    def update_status(self, item_id, next_status):
+        """
+        :param item_id: int fk item id
+        :param next_status: varchar(60) fk of next status
+        :return: none
+        """
+        # Get current status of item
+        self.cursor.execute("select [status] from work.items where id = '{}'".format(item_id))
+        status = self.cursor.fetchall()[0][0]
+
+        # Check if status change exists
+        if not self.get_status_exists(status, next_status):
+            raise Exception('Changes not applied: ' + next_status + ' is not a valid state following ' + status +
+                            '.  See work.status_precedence for valid status advancements.')
+
+        # Get date of last status
+        last_status_date = self.get_last_status_date(item_id)
+
+        # Raise exception if trying to update_status without proper updates
+        if status == 'Pending Review' and not self.is_request_reviewed(item_id, last_status_date):
+            raise Exception('Changes not applied: Request has not been reviewed since set to pending status.')
+
+        if status == 'Request Reviewed' and not self.is_developer_assigned(item_id, last_status_date):
+            raise Exception('Changes not applied: Developer has not been assigned.')
+
+        if status == 'Assigned' and not self.is_level_of_effort_assigned(item_id, last_status_date):
+            raise Exception('Changes not applied: Level of effort has not been assigned.')
+
+        if status == 'Peer Review' and next_status == 'Business Review' and not self.is_work_peer_reviewed(
+                item_id, last_status_date):
+            raise Exception('Changes not applied: No approved peer review after work item last set to Peer Review ' +
+                            'status.')
+        if status == 'Business Review' and next_status == 'Complete' and not self.is_business_review_completed(
+                item_id, last_status_date):
+            raise Exception('Changes not applied: No approved business review after work item last set to Business ' +
+                            'Review status.')
+
+        # Log status
+        self.cursor.execute("""insert into work.status_changes 
+                            (item_id, previous_status, new_status, added_by) 
+                            values ('{}', '{}','{}', '{}');""".format(
+                            item_id, status, next_status, self.get_truncated_username()))
+        # Set current status
+        self.cursor.execute("""update work.items 
+                            set status = '{}'
+                            where id = '{}';""".format(
+                            next_status, item_id))
+
+    # Functions for update_status
+    def entry_exists(self, statement):
+        self.cursor.execute(statement)
+        try:
+            exists = self.cursor.fetchall()[0][0]
+        except IndexError:
+            return False
+        return exists is not None
+
+    def get_status_exists(self, status, next_status):
+        self.cursor.execute("""(select * from work.status_precedence 
+                            where status = '{}' and next_status = '{}')""".format
+                            (status, next_status))
+        try:
+            exists = self.cursor.fetchall()[0][0]
+            return True
+        except IndexError:
+            return False
+
+    def get_last_status_date(self, item_id):
+        self.cursor.execute("select max(added) from work.status_changes where item_id = '{}'".format(item_id))
+        last_status_update = self.cursor.fetchall()[0][0]
+        if last_status_update is None:
+            self.cursor.execute("select requested from work.items where id = '{}'".format(item_id))
+            last_status_update = self.cursor.fetchall()[0][0]
+        return last_status_update
+
+    def is_request_reviewed(self, item_id, last_status_date):
+        statement = """select * from work.request_reviews 
+                    where item_id = '{}' and approval = 1 and reviewed > '{}'""".format(
+                    item_id, last_status_date)
+        return self.entry_exists(statement)
+
+    def is_developer_assigned(self, item_id, last_status_date):
+        statement = """select * from work.assignments 
+                    where item_id = '{}' and assigned > '{}'""".format(
+                    item_id, last_status_date)
+        return self.entry_exists(statement)
+
+    def is_level_of_effort_assigned(self, item_id, last_status_date):
+        statement = """select * from work.developer_review 
+                    where item_id = '{}' and added > '{}'""".format(
+                    item_id, last_status_date)
+        return self.entry_exists(statement)
+
+    def is_work_peer_reviewed(self, item_id, last_status_date):
+        statement = """select * from work.peer_reviews 
+                    where item_id = '{}' and approval = 1 and reviewed > '{}'""".format(
+                    item_id, last_status_date)
+        return self.entry_exists(statement)
+
+    def is_business_review_completed(self, item_id, last_status_date):
+        statement = """select * from work.business_reviews 
+                    where item_id = '{}' and approval = 1 and reviewed > '{}'""".format(
+                    item_id, last_status_date)
+        return self.entry_exists(statement)
+
 
 def main():
     interface = ConfigInterface()
 
     procedures = ReportingDeveloperHelperFunctions(interface.cursor)
+    # procedures.update_status(2010, 'Closed')
     # To test:
 
     # Successfully tested:
@@ -283,8 +392,10 @@ def main():
     # Testing assign_item
     # procedures.assign_item(2010, procedures.get_truncated_username(), datetime.datetime.now(), None)
 
-    # Testing update_requested_to_reviewed
+    # Testing review_request
     # procedures.review_request(2010)
+
+    # Testing update_status
 
     # Failed tests:
 
