@@ -314,7 +314,8 @@ class BusinessReviewInputForm(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_business_review(item_id, approval, reviewer, comment, parent)
+                           command=lambda: on_submit_business_review(item_id.get(),
+                                approval.get(), reviewer.get(), comment.get(), parent)
                           )
         button.pack(pady=10)
 
