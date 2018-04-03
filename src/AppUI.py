@@ -36,7 +36,7 @@ def on_connect_pressed(server_name, label_success, label_failed, parent):
         label_success.pack_forget()
         label_failed.pack()
 
-
+#TODO
 def on_submit_report_request(parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
@@ -48,7 +48,7 @@ def on_submit_business_review(item_id, approval, reviewer, comment, parent):
     procedures = ReportingDeveloperHelperFunctions(connection.cursor())
     procedures.add_business_review(item_id, approval, reviewer, comment)
     connection.close()
-
+#TODO
 def on_submit_pending_review(parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
@@ -58,17 +58,18 @@ def on_submit_assigned_input(parent, item_id, assignee, entry_date, assigner):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     procedures = ReportingDeveloperHelperFunctions(connection.cursor())
-    procedures.assign_item(item_id, assignee, entry_date, assigner)
+    procedures.assign_item(item_id, assignee, assigner)
     connection.close()
 
+#TODO
 def on_submit_pending_development_input(parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     connection.close()
 
+#TODO
 def on_submit_add_developer(parent):
     config = ConfigInterface()
-    connection = config.connect(parent.get_server_name())
     connection.close()
 
 def on_submit_peer_review_input(parent, item_id, approval, comment):
@@ -78,6 +79,7 @@ def on_submit_peer_review_input(parent, item_id, approval, comment):
     procedures.add_peer_review(item_id, approval, comment)
     connection.close()
 
+#TODO
 def on_submit_update_status_input(parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
@@ -97,11 +99,11 @@ def on_submit_add_note_input(item_id, note, parent):
     procedures.add_note(item_id, note)
     connection.close()
 
-def on_submit_add_level_of_effort(parent, item_id, estimate, entry_date, developer):
+def on_submit_add_level_of_effort(parent, item_id, estimate, developer):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     procedures = ReportingDeveloperHelperFunctions(connection.cursor())
-    procedures.add_level_of_effort(item_id, estimate, entry_date, developer)
+    procedures.add_level_of_effort(item_id, estimate, developer)
     connection.close()
 
 def on_submit_add_developer_review(item_id, estimate, comment, reviewer, est_delivery, parent):
@@ -170,14 +172,14 @@ class ConfigurationPage(ttk.Frame):
         e = tk.Entry(self)
         e.pack()
         e.focus_set()
-
-        label3 = tk.Label(self, text="Driver")
-        label3.pack()
-
-        e2 = tk.Entry(self)
-        e2.pack()
-        e2.focus_set()
-
+#
+#        label3 = tk.Label(self, text="Driver")
+#        label3.pack()
+#
+#        e2 = tk.Entry(self)
+#        e2.pack()
+#        e2.focus_set()
+#
         label_success = tk.Label(self, text="Connection Successful")
         label_failed = tk.Label(self, text="Connection Failed")
         button = tk.Button(self,
@@ -213,19 +215,45 @@ class FormOne(ttk.Frame):
         item_id.focus_set()
 
         # Approval
-        label2 = tk.Label(self, text="Approval")
-        label2.pack()
+        label3 = tk.Label(self, text="Approval (1/0)")
+        label3.pack()
         approval = tk.Entry(self)
         approval.pack()
         approval.focus_set()
 
+        #Comment 
+        label4 = tk.Label(self, text="Comment")
+        label4.pack()
+        comment = tk.Entry(self)
+        comment.pack()
+        comment.focus_set()
+
+#        #entry_date 
+#        label5 = tk.Label(self, text="Review Date")
+#        label5.pack()
+#        entry_date = tk.Entry(self)
+#        entry_date.pack()
+#        entry_date.focus_set()
+
+        # Reviewer
+        label6 = tk.Label(self, text="Reviewer")
+        label6.pack()
+        reviewer = tk.Entry(self)
+        reviewer.pack()
+        reviewer.focus_set()
         # Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_report_request(parent)
+                           command=lambda: on_submit_report_request(parent,
+                                                                    item_id.get(),
+                                                                    approval.get(),
+                                                                    comment.get(),
+                                                                    reviewer.get()
+                                                                    )
                           )
         button.pack(pady=10)
+
 #TODO: me tooo
 class FormTwo(ttk.Frame):
     def __init__(self, parent):
@@ -248,15 +276,12 @@ class FormThree(ttk.Frame):
     """
     :param int item_id
     :param char assigned
-    :param date entry_date
     :param char assigner
     """
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         #Form Title
         label = tk.Label(self, text="Assigned Input Form")
-        label.pack(pady=10)
-        #item id
         label2 = tk.Label(self, text="Report ID")
         label2.pack()
         item_id = tk.Entry(self)
@@ -269,12 +294,6 @@ class FormThree(ttk.Frame):
         assignee.pack()
         assignee.focus_set()
         # Asignee
-        label4 = tk.Label(self, text="Assigned On")
-        label4.pack()
-        entry_date = tk.Entry(self)
-        entry_date.pack()
-        entry_date.focus_set()
-        # Asignee
         label5 = tk.Label(self, text="Assigner")
         label5.pack()
         assigner = tk.Entry(self)
@@ -286,13 +305,12 @@ class FormThree(ttk.Frame):
                            fg="red",
                            command=lambda: on_submit_assigned_input(parent, item_id.get(),
                                                                     assignee.get(),
-                                                                    entry_date.get(),
                                                                     assigner.get()
                                                                    )
                           )
         button.pack(pady=10)
 
-
+#TODO: MEEEEEEEE
 class FormFour(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
@@ -310,6 +328,8 @@ class FormFour(ttk.Frame):
                            command=lambda: on_submit_pending_development_input(parent)
                           )
         button.pack(pady=10)
+
+
 #TODO: Me too
 class FormFive(ttk.Frame):
     def __init__(self, parent):
@@ -546,15 +566,6 @@ class FormEleven(ttk.Frame):
         estimate.pack()
         estimate.focus_set()
 
-        # Add_Date format='' 
-        label3 = tk.Label(self, text="Date")
-        label3.pack()
-        entry_date = tk.Entry(self)
-        #TODO: Properly format time
-        entry_date.insert("end", datetime.datetime.now())
-        entry_date.pack()
-        entry_date.focus_set()
-
         # Developer Entry
         label4 = tk.Label(self, text="Developer")
         label4.pack()
@@ -569,7 +580,6 @@ class FormEleven(ttk.Frame):
                            fg="red",
                            command=lambda: on_submit_add_level_of_effort(parent, item_id.get(),
                                                                          estimate.get(),
-                                                                         entry_date.get(),
                                                                          developer.get()
                                                                         )
                           )
