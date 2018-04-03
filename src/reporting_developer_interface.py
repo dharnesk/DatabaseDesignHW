@@ -185,7 +185,7 @@ class ReportingDeveloperHelperFunctions:
         :return: none
         """
 
-        reviewed = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        reviewed = reviewed.strftime('%Y-%m-%d %H:%M:%S')
         if reviewer is None:
             reviewer = self.get_truncated_username()
         self.cursor.execute("""INSERT INTO work.peer_reviews (item_id, approval, comment, reviewer, reviewed) 
