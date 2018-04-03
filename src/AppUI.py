@@ -64,7 +64,7 @@ def on_submit_pending_development_input(parent):
     connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_development_input(parent):
+def on_submit_add_developer(parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     connection.close()
@@ -288,7 +288,7 @@ class FormFive(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_development_input(parent)
+                           command=lambda: on_submit_add_developer(parent)
                           )
         button.pack(pady=10)
 
