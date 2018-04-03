@@ -31,22 +31,27 @@ class ReportingDeveloperFormProcedures:
         print("")
 
     def report_request_form_procedure(self):
-        print("")
+        self.helper.add_item()
+        self.helper.add_request_review()
 
     def pending_review_form_procedure(self):
-        print("")
+        self.helper.review_request()
+        self.helper.update_status()
 
     def assign_form_procedure(self):
-        print("")
+        self.helper.assign_item()
+        self.helper.update_status()
 
     def pending_development_form_procedure(self):
-        print("")
+        self.helper.add_developer_review()
+        self.helper.update_status()
 
     def development_form_procedure(self):
-        print("")
+        self.helper.update_status()
 
     def peer_review_form_procedure(self):
-        print("")
+        self.helper.add_peer_review()
+        self.helper.update_status()
 
     def business_review_form_procedure(self, item_id, approval,
                                        reviewer, comment,
@@ -54,28 +59,34 @@ class ReportingDeveloperFormProcedures:
         self.helper.add_business_review(item_id, approval,
                                             reviewer, comment,
                                             reviewed_datetime)
-        print("")
+        self.helper.update_status()
 
     def update_status_form_procedure(self):
-        print("")
+        self.helper.update_status()
 
     def request_review_form_procedure(self):
-        print("")
+        self.helper.add_request_review()
 
     def add_note_form_procedure(self):
-        print("")
+        self.helper.add_note()
 
     def add_level_of_effort_form_procedure(self):
-        print("")
+        self.helper.add_level_of_effort()
 
     def add_developer_form_procedure(self):
-        print("")
+        self.helper.add_developer()
 
 
 class ReportingDeveloperHelperFunctions:
     """Class to add stored procedures and other helpful functions """
     def __init__(self, cursor):
         self.cursor = cursor
+
+    def update_status(self):
+        print("Placeholder function")
+
+    def add_developer(self):
+        print("Placeholder function")
 
     def get_truncated_username(self):
         """
@@ -220,22 +231,25 @@ class ReportingDeveloperHelperFunctions:
                             VALUES('{}','{}','{}','{}')""".format
                             (item_id, assignee, assigner, assigned))
 
-    def update_requested_to_reviewed(self, item_id):
+    def review_request(self, item_id, approval, comment, reviewed=datetime.datetime.now()):
         """
         :param item_id: int fk item id
+        :param approval: int 0 or 1 approval
+        :param comment: text with comments
+        :param reviewed: datetime of when reviewed
         :return: none
         """
+        reviewed = reviewed.strftime('%Y-%m-%d %H:%M:%S')
         self.cursor.execute("""update work.request_reviews
-                            Set approval = 1, comment = 'reviewed', reviewed = getdate()
+                            Set approval = '{}', comment = '{}', reviewed = '{}'
                             where item_id = '{}'""".format
-                            (item_id))
+                            (approval, comment, reviewed, item_id))
 
 
 def main():
     interface = ConfigInterface()
 
     procedures = ReportingDeveloperHelperFunctions(interface.cursor)
-    procedures.update_requested_to_reviewed(2010)
     # To test:
 
     # Successfully tested:
@@ -268,6 +282,9 @@ def main():
 
     # Testing assign_item
     # procedures.assign_item(2010, procedures.get_truncated_username(), datetime.datetime.now(), None)
+
+    # Testing update_requested_to_reviewed
+    # procedures.review_request(2010)
 
     # Failed tests:
 
