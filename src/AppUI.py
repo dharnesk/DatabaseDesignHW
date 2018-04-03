@@ -49,7 +49,7 @@ def on_submit_business_review(item_id, approval, reviewer, comment, parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     procedures = ReportingDeveloperHelperFunctions(connection.cursor())
-    procedures.add_business_review(procedures, item_id, approval, reviewer, comment)
+    procedures.add_business_review(item_id, approval, reviewer, comment)
     connection.close()
 
 def on_submit_pending_review(parent):
@@ -76,7 +76,7 @@ def on_submit_peer_review_input(parent, item_id, approval, comment):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
     procedures = ReportingDeveloperHelperFunctions(connection.cursor())
-    procedures.add_peer_review(procedures, item_id, approval, comment)
+    procedures.add_peer_review(item_id, approval, comment)
     connection.close()
 
 def on_submit_update_status_input(parent):
@@ -273,7 +273,7 @@ class FormSix(ttk.Frame):
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_peer_review_input(parent, item_id, approval, comment)
+                           command=lambda: on_submit_peer_review_input(parent, item_id.get(), approval.get(), comment.get())
                           )
         button.pack(pady=10)
 
