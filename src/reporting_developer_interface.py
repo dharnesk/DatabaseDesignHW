@@ -104,7 +104,7 @@ class ReportingDeveloperHelperFunctions:
                             values('{}','{}','{}','{}','{}','{}') """.format(
                             item_id, approval, reviewer, comment, reviewed, added_by))
 
-    def add_level_of_effort(self, item_id, estimate, added=datetime.datetime.now(), developer=None):
+    def add_level_of_effort(self, item_id, estimate, developer=None, added=datetime.datetime.now()):
         """
         :param item_id: fk int from work.items column
         :param estimate: int estimated number of hours
