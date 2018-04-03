@@ -86,9 +86,11 @@ def on_submit_request_review_input(parent):
     connection = config.connect(parent.get_server_name())
     connection.close()
 
-def on_submit_add_note_input(parent):
+def on_submit_add_note_input(item_id, note, parent):
     config = ConfigInterface()
     connection = config.connect(parent.get_server_name())
+    procedures = ReportingDeveloperHelperFunctions(connection.cursor())
+    procedures.add_note(item_id, note)
     connection.close()
 
 def on_submit_add_level_of_effort(parent, item_id, estimate, developer):
@@ -424,13 +426,25 @@ class FormTen(ttk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Add Note Input Form")
         label.pack()
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+
+        label2 = tk.Label(self, text="Item ID")
+        label2.pack()
+
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
+
+        label3 = tk.Label(self, text="Note")
+        label3.pack()
+
+        note = tk.Entry(self)
+        note.pack()
+        note.focus_set()
+
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_note_input(parent))
+                           command=lambda: on_submit_add_note_input(item_id.get(), note.get(), parent))
         button.pack(pady=10)
 
 class FormEleven(ttk.Frame):
