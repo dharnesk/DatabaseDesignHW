@@ -219,7 +219,7 @@ class FormOne(ttk.Frame):
                            command=lambda: on_submit_report_request(parent)
                           )
         button.pack(pady=10)
-
+#TODO: me tooo
 class FormTwo(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
@@ -238,20 +238,50 @@ class FormTwo(ttk.Frame):
         button.pack(pady=10)
 
 class FormThree(ttk.Frame):
+    """
+    :param int item_id
+    :param char assigned
+    :param date entry_date
+    :param char assigner
+    """
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         #Form Title
         label = tk.Label(self, text="Assigned Input Form")
-        label.pack()
-
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+        label.pack(pady=10)
+        #item id
+        label2 = tk.Label(self, text="Report ID")
+        label2.pack()
+        item_id = tk.Entry(self)
+        item_id.pack()
+        item_id.focus_set()
+        # Asignee
+        label3 = tk.Label(self, text="Assignee")
+        label3.pack()
+        assignee = tk.Entry(self)
+        assignee.pack()
+        assignee.focus_set()
+        # Asignee
+        label4 = tk.Label(self, text="Assigned On")
+        label4.pack()
+        entry_date = tk.Entry(self)
+        entry_date.pack()
+        entry_date.focus_set()
+        # Asignee
+        label5 = tk.Label(self, text="Assigner")
+        label5.pack()
+        assigner = tk.Entry(self)
+        assigner.pack()
+        assigner.focus_set()
         # Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_assigned_input(parent)
+                           command=lambda: on_submit_assigned_input(parent, item_id.get(),
+                                                                    assignee.get(),
+                                                                    entry_date.get(),
+                                                                    assigner.get()
+                                                                   )
                           )
         button.pack(pady=10)
 
@@ -273,22 +303,24 @@ class FormFour(ttk.Frame):
                            command=lambda: on_submit_pending_development_input(parent)
                           )
         button.pack(pady=10)
-
+#TODO: Me too
 class FormFive(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="Development Input Form")
-        label.pack()
+        label = tk.Label(self, text="Add Developer Input Form")
+        label.pack(pady=10)
 
-        e = tk.Entry(self)
-        e.pack()
-        e.focus_set()
+        label2 = tk.Label(self, text="New Developer")
+        label2.pack()
+        developer = tk.Entry(self)
+        developer.pack()
+        developer.focus_set()
         #Submit Button
         button = tk.Button(self,
                            text="Submit",
                            fg="red",
-                           command=lambda: on_submit_add_developer(parent)
+                           command=lambda: on_submit_add_developer(parent, developer.get())
                           )
         button.pack(pady=10)
 
@@ -371,7 +403,7 @@ class BusinessReviewInputForm(ttk.Frame):
 
 
 
-
+#TODO: Me
 class FormEight(ttk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
@@ -512,7 +544,7 @@ class FormEleven(ttk.Frame):
         label3.pack()
         entry_date = tk.Entry(self)
         #TODO: Properly format time
-        entry_date.insert("end", datetime.datetime())
+        #entry_date.insert("end", datetime.datetime())
         entry_date.pack()
         entry_date.focus_set()
 
